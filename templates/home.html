@@ -38,34 +38,18 @@
       </nav>
       <h5>All Movies</h5>
       <table class="table">
-      <thead>
-          <tr>
-            <th>Movie Name </th>
-            <th>Release Date</th>
-            <th>Genre</th>
-            <th>Likes</th>
-            <th>Dislikes</th>
-            <th>My Vote</th>
-            <th>Edit</th>
-            <th>Delete</th>
-          </tr>
-      </thead>
-      <tbody>
-        {% for movie in movies %}
+          <tbody>
             <tr>
-                <td>{{movie['movie']}}</td>
-                <td>{{movie['date']}}</td>
-                <td>{{movie['genre']}}</td>
-                <td>{{movie['upvotes']}}</td>
-                <td>{{movie['downvotes']}}</td>
-                <td><a href="{{ url_for('voting',movieid=movie['_id']|string,vote=1)}}"><img class="icon" src="static/images/like.png"></a>
-/        <a href="{{url_for('voting',movieid=movie['_id']|string,vote=-1)}}"><img class="icon" src="static/images/dislike.png"></a>
-</td>
-                <td><a href="{{ url_for('editmovie',movieid=movie['_id']|string) }}"><img class="icon" src="static/images/pencil.ico"></a>
-</td>
-                <td><a href="{{ url_for('deletemovie',movieid=movie['_id']|string)}}"><img class="icon" src="static/images/delete.jpeg"></a></td>
-              </tr>
-        {% endfor %}
+                {% for movie in movies %}
+                        <td>{{movie['movie']}} <br>
+                        {{movie['date']}} <br>
+                        {{movie['genre']}} <br>
+                        <a href="{{ url_for('voting',movieid=movie['_id']|string,vote=1)}}"><img class="icon" src="static/images/like.png"></a> : {{movie['upvotes']}} <br>
+                        <a href="{{url_for('voting',movieid=movie['_id']|string,vote=-1)}}"><img class="icon" src="static/images/dislike.png"></a> :  {{movie['downvotes']}} <br>
+                        <a href="{{ url_for('editmovie',movieid=movie['_id']|string) }}"><img class="icon" src="static/images/pencil.ico"></a>
+                        <a href="{{ url_for('deletemovie',movieid=movie['_id']|string)}}"><img class="icon" src="static/images/delete.jpeg"></a></td>
+                {% endfor %}
+          </tr>
       </tbody>
       </table>
         <a href="{{ url_for('addmovie')}}"><img class="icon" src="static/images/add.png" alt=""></a>
