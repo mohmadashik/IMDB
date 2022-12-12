@@ -86,7 +86,7 @@ def register():
         return render_template("user/register.html", status=status)
     return render_template("user/register.html", status=status)
 
-
+#login commit
 @app.route('/login', methods=['GET', 'POST'])
 @not_logged_in
 def login():
