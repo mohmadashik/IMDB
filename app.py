@@ -50,15 +50,16 @@ def not_logged_in(func):
     return wrap
 
 
-@app.route("/")
+@app.route("/",methods=['GET','POST'])
 def home():
     msg = ''
-    documents = movie_col.find()
-    movies = [{item: data[item] for item in data if len(item) < 10} for data in documents]
-    for movie in movies:
-        movie['_id'] = str(movie['_id'])
+    sorting_key = 'upvotes'
+    order = 'desc'
+    if request.method == 'POST':
+        sorting_key = request.form['sorting_key']
+        order = request.form['order']
+    movies = sortmovies(order, sorting_key)
     return render_template("home.html", movies=movies, msg=msg)
-
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -86,7 +87,7 @@ def register():
         return render_template("user/register.html", status=status)
     return render_template("user/register.html", status=status)
 
-#login commit
+
 @app.route('/login', methods=['GET', 'POST'])
 @not_logged_in
 def login():
@@ -110,21 +111,37 @@ def login():
     return render_template("user/login.html", msg=msg)
 
 
-@app.route('/profile')
+@app.route('/profile',methods=['GET','POST'])
 @login_required
 def profile():
-    msg=''
-    documents = movie_col.find()
-    movies = [{item: data[item] for item in data if len(item) < 10} for data in documents]
-    for movie in movies :
-        movie['_id'] = str(movie['_id'])
+    msg = ''
+    sorting_key = 'upvotes'
+    order = 'desc'
+    if request.method == 'POST':
+        sorting_key = request.form['sorting_key']
+        order = request.form['order']
+    movies = sortmovies(order,sorting_key)
     return render_template("user/dashboard.html", movies=movies,msg=msg)
 
+def sortmovies(order,sorting_key):
+    if sorting_key =='date':
+        movies = movie_col.find()
+        movies = list(movies)
+        for movie in movies:
+            movie['date'] = datetime.strptime(movie['date'],"%d-%m-%Y").date()
+        sorted_movies=sorted(movies,key=lambda i:i['date'])
+    elif sorting_key=='upvotes':
+        sorted_movies = movie_col.find().sort("upvotes",-1)
+    elif sorting_key =='downvotes':
+        sorted_movies = movie_col.find().sort("downvotes",-1)
+    output = [{item: data[item] for item in data} for data in sorted_movies]
+    output = output if order=="desc" else output[-1::-1]
+    return output
 
 @app.route('/account')
 @login_required
 def account():
-    user_details = user_col.find_one({"username": session['username']})
+    user_details = user_col.find_one({"_id": ObjectId(session['id'])})
     return render_template("user/account.html", user=user_details)
 
 
@@ -195,28 +212,6 @@ def deletemovie(movieid):
     movies = [{item: data[item] for item in data if len(item) < 10} for data in movies]
     return redirect(url_for("profile",movies=movies))
 
-# def sortmovies():
-#     status = ''
-#     sorting_key = request.json['sorting_key']
-#     order = 'desc' if 'order' not in request.json else request.json['order']
-#     if sorting_key =='date':
-#         movies = movie_col.find()
-#         movies = list(movies)
-#         for movie in movies:
-#             movie['date'] = datetime.strptime(movie['date'],"%d-%m-%Y").date()
-#         sorted_movies=sorted(movies,key=lambda i:i['date'])
-#         output = [{item:data[item]for item in data if len(item)<10 and item!='_id'}for data in sorted_movies]
-#     elif sorting_key=='upvotes':
-#         sorted_movies = movie_col.find().sort("upvotes",-1)
-#     elif sorting_key =='downvotes':
-#         sorted_movies = movie_col.find().sort("downvotes",-1)
-#     else:
-#         status = "you must give a valid sorting key"
-#         return jsonify({"status":status})
-#     output = [{item: data[item] for item in data if len(item)<10 and item!='_id'} for data in sorted_movies]
-#     output = output if order=="desc" else output[-1::-1]
-#     return output
-#
 @app.route('/voting/<movieid>/<vote>/',methods=['GET','POST','PUT'])
 @login_required
 def voting(movieid,vote):
