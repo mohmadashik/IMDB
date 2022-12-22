@@ -1,1 +1,4 @@
 imdbenv
+app/__pycache__/
+app/movie/__pycache__/
+app/user/__pycache__/
