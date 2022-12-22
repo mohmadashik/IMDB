@@ -61,11 +61,11 @@
                 {% if movie['genre'] == session['genre'] %}
 
                         <td>{{movie['movie']}} <br>
-                        <p>release:{{movie['date']}} </p>
-                        <p>genre:{{movie['genre']}} </p>
-                        <a href="{{ url_for('voting',movieid=movie['_id']|string,vote=1)}}"><img class="icon" src="static/images/like.png"></a>  {{movie['upvotes']}} <br>
+                        release:{{movie['date']}} <br>
+                        genre:{{movie['genre']}} <br><br>
+                        <a href="{{ url_for('voting',movieid=movie['_id']|string,vote=1)}}"><img class="icon" src="static/images/like.png"></a>  {{movie['upvotes']}} &nbsp;&nbsp;&nbsp;&nbsp;
                         <a href="{{url_for('voting',movieid=movie['_id']|string,vote=-1)}}"><img class="icon" src="static/images/dislike.png"></a>   {{movie['downvotes']}} <br>
-                        <a href="{{ url_for('editmovie',movieid=movie['_id']|string) }}"><img class="icon" src="static/images/pencil.ico"></a>
+                        <a href="{{ url_for('editmovie',movieid=movie['_id']|string) }}"><img class="icon" src="static/images/pencil.ico"></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <a href="{{ url_for('deletemovie',movieid=movie['_id']|string)}}"><img class="icon" src="static/images/delete.jpeg"></a></td>
                      {% endif %}
                 {% endfor %}
@@ -79,11 +79,11 @@
       <tr>
                {% for movie in movies %}
                         <td>{{movie['movie']}} <br>
-                        <p>release:{{movie['date']}} </p>
-                        <p>genre:{{movie['genre']}} </p>
-                        <a href="{{ url_for('voting',movieid=movie['_id']|string,vote=1)}}"><img class="icon" src="static/images/like.png"></a>  {{movie['upvotes']}} <br>
+                        release:{{movie['date']}} <br>
+                        genre:{{movie['genre']}} <br><br>
+                        <a href="{{ url_for('voting',movieid=movie['_id']|string,vote=1)}}"><img class="icon" src="static/images/like.png"></a>  {{movie['upvotes']}} &nbsp;&nbsp;&nbsp;&nbsp;
                         <a href="{{url_for('voting',movieid=movie['_id']|string,vote=-1)}}"><img class="icon" src="static/images/dislike.png"></a>   {{movie['downvotes']}} <br>
-                        <a href="{{ url_for('editmovie',movieid=movie['_id']|string) }}"><img class="icon" src="static/images/pencil.ico"></a>
+                        <a href="{{ url_for('editmovie',movieid=movie['_id']|string) }}"><img class="icon" src="static/images/pencil.ico"></a>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <a href="{{ url_for('deletemovie',movieid=movie['_id']|string)}}"><img class="icon" src="static/images/delete.jpeg"></a></td>
                 {% endfor %}
       </tr>

@@ -177,9 +177,9 @@ def logout():
 def addmovie():
     msg =''
     if request.method == 'POST':
-        movie = request.form['movie']
+        movie = request.form['movie'].title()
         date = request.form['date']
-        genre = request.form['genre']
+        genre = request.form['genre'].title()
         movie_col.insert_one({'movie':movie,'date':date,'genre':genre,'upvotes':0,'downvotes':0 ,'reviews':{}})
         msg = 'movie added successfully'
         return render_template("movie/add.html",msg=msg)
@@ -192,9 +192,9 @@ def addmovie():
 def editmovie(movieid):
     msg = ''
     if request.method == "POST":
-        movie = request.form['movie']
+        movie = request.form['movie'].title()
         date = request.form['date']
-        genre = request.form['genre']
+        genre = request.form['genre'].title()
         update_query = {"$set": {'movie': movie, 'date': date, 'genre': genre}}
         response = movie_col.update_one({"_id": ObjectId(movieid)}, update_query)
         msg = 'updated successfully' if response.modified_count > 0 else ''
