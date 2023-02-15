@@ -1,0 +1,33 @@
+.icon {
+    height:15px;
+    width:15px;
+}
+#allmovies{
+    font-size:12px;
+    background-color:#98c1d9;
+}
+h1,h2,h3,h4,h5,h6{
+    color:  #e63946;
+   }
+   h1
+   {
+        font-family: rubik vinyl;
+        display:inline;
+   }
+
+body{
+    background-color:#e0fbfc;
+}
+nav{
+    background-color:#457b9d;
+}
+button
+{
+    background-color :#1d3557
+}
+.logo
+{
+  height:100px;
+  width : 100px;
+  float : right;
+  }

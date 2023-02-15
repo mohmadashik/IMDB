@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>profile</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="icon" type="image/png" sizes="30x30" href="{{ url_for('static',filename='images/favicon.jpg')}}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
+  </head>
+  <body>
+    <div class="container">
+      <h1 id="logo-font">POPCORN TIMES</h1><img class="logo" src="static/images/favicon.png" alt=""> <br>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{{ url_for('logout') }}">Logout</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="{{ url_for('account') }}">My Account <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+                Dropdown
+              </a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+        <h1 style="display:inline;">Welcome Back,{{ session['username'] }}!</h1>
+
+        <form style="display:inline;" action="{{ url_for('profile')}}" method="POST">
+            <select name="sorting_key">
+                <option value="upvotes">sorting key</option>
+                <option value="upvotes">Upvotes</option>
+                <option value="downvotes">Downvotes</option>
+                <option value="date">Release Date</option>
+            </select>
+            <select name="order">
+                <option value="desc">order</option>
+                <option value="desc">Descending</option>
+                <option value="asc">Ascending</option>
+            </select>
+            <button class="btn btn-info">sort movies</button>
+        </form>
+        <div class="msg">{{ msg }}</div>
+      {% if session['genre'] != None %}
+      <h5>{{ session['genre'] }} movies</h5>
+      <table id="allmovies"class="table">
+      <tbody>
+        <tr>
+            {% for movie in movies %}
+                {% if movie['genre'] == session['genre'] %}
+
+                        <td>{{movie['movie']}} <br>
+                        release:{{movie['date']}} <br>
+                        genre:{{movie['genre']}} <br><br>
+                        <a href="{{ url_for('voting',movieid=movie['_id']|string,vote=1)}}"><img class="icon" src="static/images/like.png"></a>  {{movie['upvotes']}} &nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="{{url_for('voting',movieid=movie['_id']|string,vote=-1)}}"><img class="icon" src="static/images/dislike.png"></a>   {{movie['downvotes']}} <br>
+                        <a href="{{ url_for('editmovie',movieid=movie['_id']|string) }}"><img class="icon" src="static/images/pencil.ico"></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="{{ url_for('deletemovie',movieid=movie['_id']|string)}}"><img class="icon" src="static/images/delete.jpeg"></a></td>
+                     {% endif %}
+                {% endfor %}
+        </tr>
+      </tbody>
+      </table>
+      {% endif %}
+      <h5>All Movies</h5>
+      <table class="table" id="allmovies">
+      <tbody>
+      <tr>
+               {% for movie in movies %}
+                        <td>{{movie['movie']}} <br>
+                        release:{{movie['date']}} <br>
+                        genre:{{movie['genre']}} <br><br>
+                        <a href="{{ url_for('voting',movieid=movie['_id']|string,vote=1)}}"><img class="icon" src="static/images/like.png"></a>  {{movie['upvotes']}} &nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="{{url_for('voting',movieid=movie['_id']|string,vote=-1)}}"><img class="icon" src="static/images/dislike.png"></a>   {{movie['downvotes']}} <br>
+                        <a href="{{ url_for('editmovie',movieid=movie['_id']|string) }}"><img class="icon" src="static/images/pencil.ico"></a>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="{{ url_for('deletemovie',movieid=movie['_id']|string)}}"><img class="icon" src="static/images/delete.jpeg"></a></td>
+                {% endfor %}
+      </tr>
+      </tbody>
+      </table>
+        <a href="{{ url_for('addmovie')}}"><img class="icon" src="static/images/add.png" alt=""></a>
+
+    </div>
+  </body>
+</html>
